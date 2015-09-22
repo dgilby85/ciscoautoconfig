@@ -84,7 +84,7 @@ def args():
 
 
 def main_menu():
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     print '\n\n'
     print '\t* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *'
     print '\t*                                                           *'
@@ -109,7 +109,7 @@ def main_menu():
 
 
 def sh_cmd_outputs():
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     print_host = host
     print_host = print_host.replace('\n', '')
     print '\n\n\t----------------- Connected to %s -------------------\n\n' % print_host
@@ -135,7 +135,7 @@ def sh_cmd_outputs():
 
 
 def sh_config_outputs():
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     print_host = host
     print_host = print_host.replace('\n', '')
     print '\n\n\t----------------- Connected to %s -------------------\n\n' % print_host
@@ -154,7 +154,7 @@ def sh_config_outputs():
 
 
 def exec_menu(choice):
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     try:
         menu_actions[choice]()
     except KeyError:
@@ -168,7 +168,7 @@ def exec_menu(choice):
 
 
 def sub_exec_menu(choice):
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     try:
         sub_menu_actions[choice]()
     except KeyError:
@@ -182,7 +182,7 @@ def sub_exec_menu(choice):
 
 
 def config_outputs_menu(choice):
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     try:
         config_menu_actions[choice]()
     except KeyError:
@@ -218,7 +218,7 @@ def sortkey_natural(s):
 
 
 def sh_host_list():
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     hosts = open(hosts_file, 'r')
     for x in hosts:
         x = x.strip('\n')
@@ -233,7 +233,7 @@ def sh_host_list():
 
 
 def sh_int_sts():
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     file = open('int', 'r')
     int_face = file.readlines()[2:58]
     for intface in int_face:
@@ -248,7 +248,7 @@ def sh_int_sts():
 
 
 def print_cdp():
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     for x in sorted(network_devices, key=sortkey_natural):
         print (x)
         for y in network_devices[x]:
@@ -262,7 +262,7 @@ def print_cdp():
 
 
 def sh_err_dis():
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     err_dis = []
     print '\n\tChecking for error disabled ports'
     time.sleep(.5)
@@ -461,7 +461,7 @@ def connect():
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     for host in hosts:
         global host
-        os.system('clear')
+        os.system('cls' if os.name == 'nt' else 'clear')
         print_host = host
         print_host = print_host.replace('\n', '')
         try:
@@ -501,7 +501,7 @@ def connect():
 
 
 def man_config_port():
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     access = access_list
     trunk = trunk_list
     ap = ap_list
@@ -555,7 +555,7 @@ def man_config_port():
 
 
 def config_cdp():
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     intersect = []
     for item in network_devices:
         if not item.startswith(starts_items):
@@ -630,7 +630,7 @@ def config_cdp():
 
 
 def config_non_cdp():
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     if_no_cdp_intersect = []
     for item in int_sts:
         if item not in network_devices:
@@ -679,7 +679,7 @@ def config_non_cdp():
 
 
 def config_err_dis():
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
     err_dis = []
     for item in int_sts:
         if int_sts[item]['Status'] == 'err-disabled':
