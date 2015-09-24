@@ -679,7 +679,6 @@ def man_config_port():
     file.close()
     item = raw_input('\n\n Which Port would you like to configure? (ex. Gi0/1 or gi0/1): ')
     selection = raw_input(' 1.\tDefault\n 2.\tAccess\n 3.\tTrunk\n 4.\tAP\n\n\t\t: ')
-    print_selection = selection
     if selection == '1':
         selection = 'default'
     elif selection == '2':
@@ -692,6 +691,7 @@ def man_config_port():
         print 'Invalid Option'
         time.sleep(1)
         sh_config_outputs()
+    print_selection = selection
     print '\n\n----- Reconfiguring port: ' + item + ' as a ' + print_selection + ' Port -----\n'
     default_list(item)
     remote_conn.send('interface %s \n' % item)
