@@ -43,19 +43,19 @@ Being that this is my first Python program, I'd really appreciate feedback on th
 
 
 
-usage: autocisco.py [-h] -f HOSTS [-a ACCESS] [-w WIRELESS] [-v VOICE]
+	usage: autocisco.py [-h] -f HOSTS [-a ACCESS] [-w WIRELESS] [-v VOICE]
 
-An awesome Python Program to search through switches and auto configure ports
-based on CDP via SSH.
+	An awesome Python Program to search through switches and auto configure ports
+	based on CDP via SSH.
 
-optional arguments:
+	optional arguments:
 
-  -h, --help            show this help message and exit
+	  -h, --help            show this help message and exit
   
-  -f HOSTS, --hosts HOSTS Specify a hosts file
+	  -f HOSTS, --hosts HOSTS Specify a hosts file
 	
-  -a ACCESS, --access ACCESS  Enter Access Vlan Value -- (default = 1)
+	  -a ACCESS, --access ACCESS  Enter Access Vlan Value -- (default = 1)
  
-  -w WIRELESS, --wireless WIRELESS  Enter Wireless Vlan Value -- (default = 1)
+	  -w WIRELESS, --wireless WIRELESS  Enter Wireless Vlan Value -- (default = 1)
  
-  -v VOICE, --voice VOICE Enter Voice Vlan Value -- (default = 1)
+	  -v VOICE, --voice VOICE Enter Voice Vlan Value -- (default = 1)
