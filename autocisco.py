@@ -393,8 +393,8 @@ def sh_cmd_outputs():
     print '\t\t1. Show parsed cdp neighbor detail\n'
     print '\t\t2. Show interface status\n'
     print '\t\t3. Show error disabled ports\n'
-    print '\t\t4. Show devices without trunk or vlan 90 in cdp\n'
-    print '\t\t5. Show devices with trunk or vlan 90 but not in cdp\n\n'
+    print '\t\t4. Show devices without trunk or AP vlan in cdp\n'
+    print '\t\t5. Show devices with trunk or AP vlan but not in cdp\n\n'
     print '\t\t6. Configure ports menu'
     print '\n\n\t\t7. Resync info with switch'
     print '\n\n\t\t8. Done and move on to next switch'
@@ -512,8 +512,8 @@ def sh_config_outputs():
     print_host = print_host.replace('\n', '')
     print '\n\n\t----------------- Connected to %s -------------------\n\n' % print_host
     print '\tPlease choose an option from the following:\n\n'
-    print '\t\t1. Auto configure ports with cdp but no trunk or vlan90\n'
-    print '\t\t2. Auto configure ports without cdp and trunk or vlan90\n'
+    print '\t\t1. Auto configure ports with cdp but no trunk or AP vlan\n'
+    print '\t\t2. Auto configure ports without cdp and trunk or AP vlan\n'
     print '\t\t3. Default error disabled ports\n'
     print '\t\t4. Manual configure ports'
     print '\n\n\t\t9. Back'
@@ -556,7 +556,7 @@ def config_cdp():
                     print '*** Port ' + item + ' Has been configured and saved'
                     time.sleep(2)
                 if 'cisco AIR' in network_devices[item]['Model'] and int_sts[item]['Vlan'] != ap_vlan:
-                    print '\n\n----- Reconfiguring port: ' + item + ' as a Vlan 90 Port -----\n'
+                    print '\n\n----- Reconfiguring port: ' + item + ' as a AP Port -----\n'
                     default_list(item)
                     remote_conn.send('interface %s \n' % item)
                     for snd_cmd in ap_list:
@@ -672,6 +672,7 @@ def man_config_port():
     access = access_list
     trunk = trunk_list
     ap = ap_list
+    print_selection = ''
     file = open('int', 'r')
     int_face = file.readlines()[2:58]
     for intface in int_face:
@@ -681,17 +682,20 @@ def man_config_port():
     selection = raw_input(' 1.\tDefault\n 2.\tAccess\n 3.\tTrunk\n 4.\tAP\n\n\t\t: ')
     if selection == '1':
         selection = 'default'
+        print_selection = 'Default'
     elif selection == '2':
         selection = access
+        print_selection = 'Access'
     elif selection == '3':
         selection = trunk
+        print_selection = 'Trunk'
     elif selection == '4':
         selection = ap
+        print_selection = 'AP'
     else:
         print 'Invalid Option'
         time.sleep(1)
         sh_config_outputs()
-    print_selection = selection
     print '\n\n----- Reconfiguring port: ' + item + ' as a ' + print_selection + ' Port -----\n'
     default_list(item)
     remote_conn.send('interface %s \n' % item)
