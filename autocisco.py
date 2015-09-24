@@ -219,6 +219,7 @@ def connect():
             client = paramiko.SSHClient()
             client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             remote_conn = ()
+            ip = ip.strip('\n')
             host = ip
             print_host = host
             print_host = print_host.replace('\n', '')
