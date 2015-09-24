@@ -131,7 +131,7 @@ def clear_screen():
 
 def press_return():
     print '\n\n(Make sure to resync the device to see any configuration changes)'
-    print '\n\nPress enter to go back'
+    print '\n\nPress enter to go back\n'
     raw_input(' >> ')
 
 
@@ -184,8 +184,8 @@ def sh_host_list():
     hosts = open(hosts_file, 'r')
     print '\n\n\tHosts in file: \n'
     for x in hosts:
-        x = x.strip('\n')
-        print '\t\t' + x
+        print '\t\t' + x.strip('\n')
+    print '\n\n'
     hosts.close()
     press_return()
     main_menu()
@@ -196,11 +196,11 @@ def sh_host_list():
 
 def select_vlans():
     print '\n\n\t Current vlan settings are: '
-    print '\n\t Access Vlan: ' + access_vlan
-    print '\n\t AP Vlan: ' + ap_vlan
-    print '\n\t Voice Vlan: ' + voice_vlan
+    print '\n\t\t Access Vlan: ' + access_vlan
+    print '\n\t\t AP Vlan: ' + ap_vlan
+    print '\n\t\t Voice Vlan: ' + voice_vlan
     print '\n\n\n If you would like to change them, exit out of the program and add the proper ' \
-          'tags and values.'
+          'tags and values.\n\n'
     press_return()
     main_menu()
 
@@ -287,7 +287,7 @@ def get_int_and_cdp():
     remote_conn.send('sh cdp ne de\n')
     print '\t*** Getting CDP Neighbor Detail ***'
     time.sleep(5)
-    output = remote_conn.recv(50000)
+    output = remote_conn.recv(10000)
     file = open('cdp', 'w')
     file.write(output)
     file.close()
@@ -437,7 +437,7 @@ def sh_int_sts():
 
 def sh_err_dis():
     err_dis = []
-    print '\n\tChecking for error disabled ports'
+    print '\n\n\tChecking for error disabled ports'
     time.sleep(.5)
     for x in sorted(int_sts, key=sortkey_natural):
         if int_sts[x]['Status'] == 'err-disabled':
@@ -446,7 +446,7 @@ def sh_err_dis():
             for y in int_sts[x]:
                 print '\t' + y + ': ', int_sts[x][y]
     if len(err_dis) == 0:
-        print '\n\n There are no error disabled ports!!!'
+        print '\n\n There are no error disabled ports!!!\n\n\n'
     press_return()
     sh_cmd_outputs()
 
@@ -462,7 +462,7 @@ def in_cdp_and_int():
                 if 'IP Phone' not in network_devices[item]['Model']:
                     intersect.append(item)
     intersect = sorted(intersect, key=sortkey_natural)
-    print '\n\tChecking for devices that are not trunked or AP vlan with CDP'
+    print '\n\n\tChecking for devices that are not trunked or AP vlan with CDP'
     time.sleep(.5)
     for device in intersect:
         print device
@@ -471,7 +471,7 @@ def in_cdp_and_int():
         for values in int_sts[device]:
             print '\t' + values + ':', int_sts[device][values].rjust(50 - len(values))
     if len(intersect) == 0:
-        print '\n\n There are no ports that need configuring!!!'
+        print '\n\n There are no ports that need configuring!!!\n\n\n'
     press_return()
     sh_cmd_outputs()
 
@@ -488,14 +488,14 @@ def in_int_not_cdp():
                     if int_sts[item]['Vlan'] == 'trunk' or int_sts[item]['Vlan'] == ap_vlan:
                         if_no_cdp_intersect.append(item)
     if_no_cdp_intersect = sorted(if_no_cdp_intersect, key=sortkey_natural)
-    print '\n\tChecking for devices that are trunked or AP vlan but no CDP'
+    print '\n\n\tChecking for devices that are trunked or AP vlan but no CDP'
     time.sleep(.5)
     for device in if_no_cdp_intersect:
         print device
         for values in int_sts[device]:
             print '\t' + values + ':', int_sts[device][values].rjust(30 - len(values))
     if len(if_no_cdp_intersect) == 0:
-        print '\n\n There are no ports that need configuring!!!'
+        print '\n\n There are no ports that need configuring!!!\n\n\n'
     press_return()
     sh_cmd_outputs()
 
@@ -534,10 +534,10 @@ def config_cdp():
                     if 'IP Phone' not in network_devices[item]['Model']:
                         intersect.append(item)
     intersect = sorted(intersect, key=sortkey_natural)
-    print '\n\tChecking for devices that are not trunked or AP vlan with CDP'
+    print '\n\n\tChecking for devices that are not trunked or AP vlan with CDP'
     time.sleep(.5)
     for item in intersect:
-        print '\n\t' + item + '\t' + network_devices[item]['Model'] + '\t' + int_sts[item]['Vlan']
+        print '\n\t' + item + '\t' + network_devices[item]['Model'] + '\t\t' + int_sts[item]['Vlan']
     if len(intersect) == 0:
         print '\n\n There are no ports that need configuring!!!\n\n\n'
     elif len(intersect) >= 1:
@@ -598,7 +598,7 @@ def config_non_cdp():
                 if not item.startswith(starts_items):
                     if_no_cdp_intersect.append(item)
     if_no_cdp_intersect = sorted(if_no_cdp_intersect, key=sortkey_natural)
-    print '\n\tChecking for devices that are trunked or AP vlan but no CDP'
+    print '\n\n\tChecking for devices that are trunked or AP vlan but no CDP'
     time.sleep(.5)
     for item in if_no_cdp_intersect:
         print '\n\t' + item + '\t' + int_sts[item]['Vlan']
@@ -637,12 +637,12 @@ def config_err_dis():
         if int_sts[item]['Status'] == 'err-disabled':
             err_dis.append(item)
     err_dis = sorted(err_dis, key=sortkey_natural)
-    print '\n\tChecking for error disabled ports'
+    print '\n\n\tChecking for error disabled ports'
     time.sleep(.5)
     for item in err_dis:
         print '\n\t' + item + '\t' + int_sts[item]['Status']
     if len(err_dis) == 0:
-        print '\n\n There are no ports that need configuring\n\n\n!!!'
+        print '\n\n There are no ports that need configuring!!!\n\n\n'
     if len(err_dis) >= 1:
         choice = raw_input('\n\n Would you like to configure the port(s) as default? (y/n): ')
         for item in err_dis:
@@ -675,10 +675,11 @@ def man_config_port():
     print_selection = ''
     file = open('int', 'r')
     int_face = file.readlines()[2:58]
+    print '\n\n'
     for intface in int_face:
         print intface.strip('\n')
     file.close()
-    item = raw_input('\n\n Which Port would you like to configure? (ex. Gi0/1 or gi0/1): \n\n')
+    item = raw_input('\n\n Which Port would you like to configure? (ex. Gi0/1 or gi0/1): ')
     selection = raw_input(' 1.\tDefault\n 2.\tAccess\n 3.\tTrunk\n 4.\tAP\n\n\t\t: ')
     if selection == '1':
         selection = 'default'
