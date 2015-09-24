@@ -211,13 +211,13 @@ def select_vlans():
 
 def connect():
     creds()
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     global remote_conn
     global host
     if os.path.isfile(hosts_file):
         myfile = open(hosts_file, 'r')
         for ip in myfile:
+            client = paramiko.SSHClient()
+            client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             remote_conn = ()
             host = ip
             print_host = host
