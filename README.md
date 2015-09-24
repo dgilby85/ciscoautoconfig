@@ -46,12 +46,13 @@ An awesome Python Program to search through switches and auto configure ports
 based on CDP via SSH.
 
 optional arguments:
+
   -h, --help            show this help message and exit
-  -f HOSTS, --hosts HOSTS
-                        Specify a hosts file
-  -a ACCESS, --access ACCESS
-                        Enter Access Vlan Value -- (default = 1)
-  -w WIRELESS, --wireless WIRELESS
-                        Enter Wireless Vlan Value -- (default = 1)
-  -v VOICE, --voice VOICE
-                        Enter Voice Vlan Value -- (default = 1)
+  
+  -f HOSTS, --hosts HOSTS Specify a hosts file
+	
+  -a ACCESS, --access ACCESS  Enter Access Vlan Value -- (default = 1)
+ 
+  -w WIRELESS, --wireless WIRELESS  Enter Wireless Vlan Value -- (default = 1)
+ 
+  -v VOICE, --voice VOICE Enter Voice Vlan Value -- (default = 1)
