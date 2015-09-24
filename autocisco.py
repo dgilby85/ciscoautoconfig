@@ -130,6 +130,7 @@ def clear_screen():
 
 
 def press_return():
+    print '\n\n(Make sure to resync the device to see any configuration changes)'
     print '\n\nPress enter to go back'
     raw_input(' >> ')
 
@@ -480,10 +481,11 @@ def in_cdp_and_int():
 def in_int_not_cdp():
     if_no_cdp_intersect = []
     for item in int_sts:
-        if item not in network_devices:
-            if not item.startswith(starts_items):
-                if int_sts[item]['Vlan'] == 'trunk' or int_sts[item]['Vlan'] == ap_vlan:
-                    if_no_cdp_intersect.append(item)
+        if not item.startswith(starts_items):
+            if item not in network_devices:
+                if not item.startswith(starts_items):
+                    if int_sts[item]['Vlan'] == 'trunk' or int_sts[item]['Vlan'] == ap_vlan:
+                        if_no_cdp_intersect.append(item)
     if_no_cdp_intersect = sorted(if_no_cdp_intersect, key=sortkey_natural)
     print '\n\tChecking for devices that are trunked or AP vlan but no CDP'
     time.sleep(.5)
@@ -526,53 +528,60 @@ def config_cdp():
     intersect = []
     for item in network_devices:
         if not item.startswith(starts_items):
-            if int_sts.has_key:
-                intersect.append(item)
+            if int_sts[item]['Vlan'] != 'trunk':
+                if int_sts[item]['Vlan'] != ap_vlan:
+                    if 'IP Phone' not in network_devices[item]['Model']:
+                        intersect.append(item)
     intersect = sorted(intersect, key=sortkey_natural)
+    print '\n\tChecking for devices that are not trunked or AP vlan with CDP'
+    time.sleep(.5)
     for item in intersect:
         print '\n\t' + item + '\t' + network_devices[item]['Model'] + '\t' + int_sts[item]['Vlan']
-    choice = raw_input('\n\n Would you like to auto configure the port(s) for the appropriate device(s)? (y/n): ')
-    if choice == 'y':
-        for item in intersect:
-            if 'cisco WS' in network_devices[item]['Model'] and int_sts[item]['Vlan'] != 'trunk':
-                print '\n\n----- Reconfiguring Port: ' + item + ' as a Trunk Port -----\n'
-                default_list(item)
-                remote_conn.send('interface %s \n' % item)
-                for snd_cmd in trunk_list:
-                    print '\t*** Sending: ' + snd_cmd + ' ***'
-                    remote_conn.send(snd_cmd + '\n')
-                    time.sleep(.5)
-                end_write()
-                print '*** Port ' + item + ' Has been configured and saved'
-                time.sleep(2)
-            if 'cisco AIR' in network_devices[item]['Model'] and int_sts[item]['Vlan'] != ap_vlan:
-                print '\n\n----- Reconfiguring port: ' + item + ' as a Vlan 90 Port -----\n'
-                default_list(item)
-                remote_conn.send('interface %s \n' % item)
-                for snd_cmd in ap_list:
-                    print '\t*** Sending: ' + snd_cmd + ' ***'
-                    remote_conn.send(snd_cmd + '\n')
-                    time.sleep(.5)
-                end_write()
-                print '*** Port ' + item + ' Has been configured and saved'
-                time.sleep(2)
-            if 'IP Phone' in network_devices[item]['Model'] and int_sts[item]['Vlan'] != access_vlan:
-                print '\n\n----- Reconfiguring port: ' + item + ' as a Access Port -----\n'
-                default_list(item)
-                remote_conn.send('interface %s \n' % item)
-                for snd_cmd in access_list:
-                    print '\t*** Sending: ' + snd_cmd + ' ***'
-                    remote_conn.send(snd_cmd + '\n')
-                    time.sleep(.5)
-                end_write()
-                print '*** Port ' + item + ' Has been configured and saved'
-                time.sleep(2)
-    elif choice == 'n':
-        pass
-    else:
-        print 'Invalid Selection, Please Try Again.\n'
-        time.sleep(1)
-        config_cdp()
+    if len(intersect) == 0:
+        print '\n\n There are no ports that need configuring!!!'
+    elif len(intersect) >= 1:
+        choice = raw_input('\n\n Would you like to auto configure the port(s) for the appropriate device(s)? (y/n): ')
+        if choice == 'y':
+            for item in intersect:
+                if 'cisco WS' in network_devices[item]['Model'] and int_sts[item]['Vlan'] != 'trunk':
+                    print '\n\n----- Reconfiguring Port: ' + item + ' as a Trunk Port -----\n'
+                    default_list(item)
+                    remote_conn.send('interface %s \n' % item)
+                    for snd_cmd in trunk_list:
+                        print '\t*** Sending: ' + snd_cmd + ' ***'
+                        remote_conn.send(snd_cmd + '\n')
+                        time.sleep(.5)
+                    end_write()
+                    print '*** Port ' + item + ' Has been configured and saved'
+                    time.sleep(2)
+                if 'cisco AIR' in network_devices[item]['Model'] and int_sts[item]['Vlan'] != ap_vlan:
+                    print '\n\n----- Reconfiguring port: ' + item + ' as a Vlan 90 Port -----\n'
+                    default_list(item)
+                    remote_conn.send('interface %s \n' % item)
+                    for snd_cmd in ap_list:
+                        print '\t*** Sending: ' + snd_cmd + ' ***'
+                        remote_conn.send(snd_cmd + '\n')
+                        time.sleep(.5)
+                    end_write()
+                    print '*** Port ' + item + ' Has been configured and saved'
+                    time.sleep(2)
+                if 'IP Phone' in network_devices[item]['Model'] and int_sts[item]['Vlan'] != access_vlan:
+                    print '\n\n----- Reconfiguring port: ' + item + ' as a Access Port -----\n'
+                    default_list(item)
+                    remote_conn.send('interface %s \n' % item)
+                    for snd_cmd in access_list:
+                        print '\t*** Sending: ' + snd_cmd + ' ***'
+                        remote_conn.send(snd_cmd + '\n')
+                        time.sleep(.5)
+                    end_write()
+                    print '*** Port ' + item + ' Has been configured and saved'
+                    time.sleep(2)
+        elif choice == 'n':
+            pass
+        else:
+            print 'Invalid Selection, Please Try Again.\n'
+            time.sleep(1)
+            config_cdp()
     press_return()
     sh_config_outputs()
 
@@ -588,9 +597,13 @@ def config_non_cdp():
                 if not item.startswith(starts_items):
                     if_no_cdp_intersect.append(item)
     if_no_cdp_intersect = sorted(if_no_cdp_intersect, key=sortkey_natural)
+    print '\n\tChecking for devices that are trunked or AP vlan but no CDP'
+    time.sleep(.5)
     for item in if_no_cdp_intersect:
         print '\n\t' + item + '\t' + int_sts[item]['Vlan']
-    if len(if_no_cdp_intersect) >= 1:
+    if len(if_no_cdp_intersect) == 0:
+        print '\n\n There are no ports that need configuring!!!'
+    elif len(if_no_cdp_intersect) >= 1:
         choice = raw_input('\n\n Would you like to auto configure the port(s)? (y/n): ')
         if choice == 'y':
             for item in if_no_cdp_intersect:
@@ -610,7 +623,6 @@ def config_non_cdp():
             print ' Invalid Selection, Please Try Again.\n'
             time.sleep(1)
             config_non_cdp()
-    print '\n\n There are no ports that need configuring!!!'
     press_return()
     sh_config_outputs()
 
@@ -624,8 +636,12 @@ def config_err_dis():
         if int_sts[item]['Status'] == 'err-disabled':
             err_dis.append(item)
     err_dis = sorted(err_dis, key=sortkey_natural)
+    print '\n\tChecking for error disabled ports'
+    time.sleep(.5)
     for item in err_dis:
         print '\n\t' + item + '\t' + int_sts[item]['Status']
+    if len(err_dis) == 0:
+        print '\n\n There are no ports that need configuring!!!'
     if len(err_dis) >= 1:
         choice = raw_input('\n\n Would you like to configure the port(s) as default? (y/n): ')
         for item in err_dis:
@@ -644,7 +660,6 @@ def config_err_dis():
                 print 'Invalid Selection, Please Try Again.\n'
                 time.sleep(1)
                 config_err_dis()
-    print '\n\n There are no ports that need configuring!!!'
     press_return()
     sh_config_outputs()
 
