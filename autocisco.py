@@ -102,6 +102,8 @@ def default_list(item):
     remote_conn.send('conf t\n')
     remote_conn.send('default interface %s \n' % item)
     time.sleep(1)
+    remote_conn.send('interface %s \n' % item)
+    time.sleep(.5)
 
 
 # Send commands to end and wr me
@@ -287,7 +289,7 @@ def get_int_and_cdp():
     remote_conn.send('sh cdp ne de\n')
     print '\t*** Getting CDP Neighbor Detail ***'
     time.sleep(5)
-    output = remote_conn.recv(10000)
+    output = remote_conn.recv(50000)
     file = open('cdp', 'w')
     file.write(output)
     file.close()
@@ -547,7 +549,6 @@ def config_cdp():
                 if 'cisco WS' in network_devices[item]['Model'] and int_sts[item]['Vlan'] != 'trunk':
                     print '\n\n----- Reconfiguring Port: ' + item + ' as a Trunk Port -----\n'
                     default_list(item)
-                    remote_conn.send('interface %s \n' % item)
                     for snd_cmd in trunk_list:
                         print '\t*** Sending: ' + snd_cmd + ' ***'
                         remote_conn.send(snd_cmd + '\n')
@@ -558,7 +559,6 @@ def config_cdp():
                 if 'cisco AIR' in network_devices[item]['Model'] and int_sts[item]['Vlan'] != ap_vlan:
                     print '\n\n----- Reconfiguring port: ' + item + ' as a AP Port -----\n'
                     default_list(item)
-                    remote_conn.send('interface %s \n' % item)
                     for snd_cmd in ap_list:
                         print '\t*** Sending: ' + snd_cmd + ' ***'
                         remote_conn.send(snd_cmd + '\n')
@@ -569,7 +569,6 @@ def config_cdp():
                 if 'IP Phone' in network_devices[item]['Model'] and int_sts[item]['Vlan'] != access_vlan:
                     print '\n\n----- Reconfiguring port: ' + item + ' as a Access Port -----\n'
                     default_list(item)
-                    remote_conn.send('interface %s \n' % item)
                     for snd_cmd in access_list:
                         print '\t*** Sending: ' + snd_cmd + ' ***'
                         remote_conn.send(snd_cmd + '\n')
@@ -610,7 +609,6 @@ def config_non_cdp():
             for item in if_no_cdp_intersect:
                 print '\n\n----- Reconfiguring port: ' + item + ' as a Access Port -----\n'
                 default_list(item)
-                remote_conn.send('interface %s \n' % item)
                 for snd_cmd in access_list:
                     print '\t*** Sending: ' + snd_cmd + ' ***'
                     remote_conn.send(snd_cmd + '\n')
@@ -649,7 +647,7 @@ def config_err_dis():
             if choice == 'y':
                 print '\n\n----- Reconfiguring port: ' + item + ' as a Default Port -----\n'
                 default_list(item)
-                remote_conn.send('interface %s \n' % item)
+                remote_conn.send('switchport mode access\n')
                 remote_conn.send('shut\n')
                 remote_conn.send('no shut\n')
                 end_write()
@@ -699,7 +697,8 @@ def man_config_port():
         sh_config_outputs()
     print '\n\n----- Reconfiguring port: ' + item + ' as a ' + print_selection + ' Port -----\n'
     default_list(item)
-    remote_conn.send('interface %s \n' % item)
+    if selection == 'default':
+        remote_conn.send('switchport mode access\n')
     if selection != 'default':
         for snd_cmd in selection:
             print '\t*** Sending: ' + snd_cmd + ' ***'
