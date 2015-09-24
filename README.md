@@ -22,13 +22,13 @@ The program does a few things:
 
 2.     Show devices in CDP neighbor but not trunked or AP's not in AP vlan based on CDP model
 
-3.     Show interfaces that are configured for trunk or AP's but have no CDP neighbor
+3.     Show connected interfaces that are configured for trunk or AP's but have no CDP neighbor
 
   Then, a separate menu for changing interface configurations:
 
 1.     Auto default and reconfigure port to either access, trunk, or AP depending on CDP model
 
-2.     Auto default and reconfigure ports who are configured for trunk or AP that have no CDP
+2.     Auto default and reconfigure ports who are connected and configured for trunk or AP that have no CDP
      
 3.     Auto default error disabled ports
     
