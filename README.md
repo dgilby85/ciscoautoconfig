@@ -37,7 +37,8 @@ The program does a few things:
 
 The program is written in Python 2.7 and uses Paramiko to handle SSH connections. I use it on my Linux machine, but am working on porting it to windows.
 
-Being that this is my first Python program, I'd really appreciate feedback on the code, thanks.
+Being that this is my first Python program, I'd really appreciate feedback on the code, thanks. 
+
 
 
 
