@@ -19,19 +19,14 @@ The program does a few things:
   Then, in the menu, there are views for certain criteria:
 
 1.     Show error disabled ports
-
-2.     Show devices in CDP neighbor but not trunked or AP's not in vlan 90 (my wireless vlan)
-
-3. Show interfaces that are configured for trunk or AP's but have no CDP neighbor
+2.     Show devices in CDP neighbor but not trunked or AP's not in AP vlan based on CDP model
+3.     Show interfaces that are configured for trunk or AP's but have no CDP neighbor
 
   Then, a separate menu for changing interface configurations:
 
 1.     Auto default and reconfigure port to either access, trunk, or AP depending on CDP model
-
 2.     Auto default and reconfigure ports who are configured for trunk or AP that have no CDP
-
 3.     Auto default error disabled ports
-
 4.     Manually configure port
 
 
