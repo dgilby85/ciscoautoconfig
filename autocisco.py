@@ -426,7 +426,7 @@ def sh_int_sts():
     file = open('int', 'r')
     int_face = file.readlines()[2:58]
     for x in int_face:
-        print x
+        print x.strip('\n')
     file.close()
     press_return()
     sh_cmd_outputs()
@@ -539,7 +539,7 @@ def config_cdp():
     for item in intersect:
         print '\n\t' + item + '\t' + network_devices[item]['Model'] + '\t' + int_sts[item]['Vlan']
     if len(intersect) == 0:
-        print '\n\n There are no ports that need configuring!!!'
+        print '\n\n There are no ports that need configuring!!!\n\n\n'
     elif len(intersect) >= 1:
         choice = raw_input('\n\n Would you like to auto configure the port(s) for the appropriate device(s)? (y/n): ')
         if choice == 'y':
@@ -603,7 +603,7 @@ def config_non_cdp():
     for item in if_no_cdp_intersect:
         print '\n\t' + item + '\t' + int_sts[item]['Vlan']
     if len(if_no_cdp_intersect) == 0:
-        print '\n\n There are no ports that need configuring!!!'
+        print '\n\n There are no ports that need configuring!!!\n\n\n'
     elif len(if_no_cdp_intersect) >= 1:
         choice = raw_input('\n\n Would you like to auto configure the port(s)? (y/n): ')
         if choice == 'y':
@@ -642,7 +642,7 @@ def config_err_dis():
     for item in err_dis:
         print '\n\t' + item + '\t' + int_sts[item]['Status']
     if len(err_dis) == 0:
-        print '\n\n There are no ports that need configuring!!!'
+        print '\n\n There are no ports that need configuring\n\n\n!!!'
     if len(err_dis) >= 1:
         choice = raw_input('\n\n Would you like to configure the port(s) as default? (y/n): ')
         for item in err_dis:
@@ -676,9 +676,9 @@ def man_config_port():
     file = open('int', 'r')
     int_face = file.readlines()[2:58]
     for intface in int_face:
-        print intface
+        print intface.strip('\n')
     file.close()
-    item = raw_input('\n\n Which Port would you like to configure? (ex. Gi0/1 or gi0/1): ')
+    item = raw_input('\n\n Which Port would you like to configure? (ex. Gi0/1 or gi0/1): \n\n')
     selection = raw_input(' 1.\tDefault\n 2.\tAccess\n 3.\tTrunk\n 4.\tAP\n\n\t\t: ')
     if selection == '1':
         selection = 'default'
