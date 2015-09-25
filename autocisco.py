@@ -48,7 +48,7 @@ def args():
         '1': sh_host_list,
         '2': select_vlans,
         '3': connect,
-        '0': sys.exit}
+        '0': prog_exit}
 
     sub_menu_actions = {
         'cmd_outputs': sh_cmd_outputs,
@@ -148,6 +148,16 @@ def exec_menu(menu_actions, menu_return, choice):
         print 'Invalid Selection, Please Try Again.\n'
         time.sleep(1)
         menu_return()
+
+
+# Exit commands
+
+def prog_exit():
+    if os.path.isfile('cdp') is True:
+        os.remove('cdp')
+    if os.path.isfile('int') is True:
+        os.remove('int')
+    sys.exit()
 
 
 '''***** Main menu and associated functions *************************************************************************'''
